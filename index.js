@@ -16,19 +16,20 @@ const portListen = process.env.PORT;
 // se crea la instancia del servidor
 const app = express();
 
-// configuramos CORS, (use Middleware )
+// (use Middlewares )
+// configuramos CORS, 
 app.use( cors() );
+// lectura y parseo del body de cada peticion
+app.use( express.json() ); 
 
 // hacemos la conexion a la BD
 dbConnection();
 
-// rutas
-app.get('/', ( req, res) => {
-    res.json({
-        ok: true,
-        msg:"Hola Mundo!"
-    });
-});
+// establecemos las rutas
+// Auth
+app.use('/api/login', require('./routes/auths.routes'));
+// usuarios CRUD
+app.use('/api/users', require('./routes/users.routes'));
 
 // iniciamos el servido
 app.listen( portListen, () => {
