@@ -9,6 +9,7 @@ const validatorUserFields = ( req, res = response, next ) => {
     if( !errors.isEmpty()) {
         return res.status(400).json({
             ok: false,
+            msg: 'Error de Validacion de Campos!',
             errors: errors.mapped()
         });
     }

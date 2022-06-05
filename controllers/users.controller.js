@@ -4,11 +4,11 @@ const { request, response } = require('express');
 const bcrypt = require('bcryptjs');
 
 // importamos el modelo de usuario
-const User = require('../models/users.model');
+const User = require('../models/user.model');
 
 const getListUsers = async( req = request, res = response ) => {
 
-    const users = await User.find({}, 'name email role google');
+    const users = await User.find({}, 'name email img role google');
 
     res.json(
         {

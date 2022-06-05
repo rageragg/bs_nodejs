@@ -9,7 +9,12 @@ const { validatorUserFields } = require('../middleware/validator-user-fields');
 const { validatorJWT } = require('../middleware/validator-jwt');
 
 // obtenemos los controladores de cada ruta
-const { getListUsers, createUser, updateUser, deleteUser } = require('../controllers/users.controller');
+const { 
+    getListUsers, 
+    createUser, 
+    updateUser, 
+    deleteUser 
+} = require('../controllers/users.controller');
 
 // el objeto manager de rutas
 const routes = Router();

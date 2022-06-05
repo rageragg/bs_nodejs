@@ -1,14 +1,23 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
-// Creamos el schema de datos para el modelo user
-const tokenSchema = new Schema({
-    user_id: {
+// Creamos el schema de datos para el modelo Doctor
+const doctorSchema = new Schema({
+    name: {
         type: String,
         required: true
     },
-    token: {
+    img: {
         type: String,
+    },
+    hospital: { 
+        type: Schema.Types.ObjectId,
+        ref: 'Hospital',
+        required: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     created_at: {
@@ -16,10 +25,13 @@ const tokenSchema = new Schema({
         required: true,
         default: new Date()
     }
+},
+{
+    collection: 'doctors'
 });
 
 // sobrecargamos el metodo toJSON para personalizarlo
-tokenSchema.method('toJSON', function() {
+doctorSchema.method('toJSON', function() {
     // extraemos las propiedades que no queremos mostrar
     const { __v, _id, ...object } = this.toObject();
     // transformamos el _id por uid para visualizarlos mejor
@@ -28,4 +40,4 @@ tokenSchema.method('toJSON', function() {
 });
 
 // Exportamos el modelo
-module.exports = model('Tokens', tokenSchema );
+module.exports = model('Doctor', doctorSchema );

@@ -28,6 +28,9 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     }
+}, 
+{
+    collection: 'users'
 });
 
 // sobrecargamos el metodo toJSON para personalizarlo
@@ -40,4 +43,4 @@ userSchema.method('toJSON', function() {
 });
 
 // Exportamos el modelo
-module.exports = model('Users', userSchema );
+module.exports = model('User', userSchema );

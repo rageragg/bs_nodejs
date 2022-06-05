@@ -3,14 +3,13 @@ const { request, response } = require('express');
 // importamos el encriptador
 const bcrypt = require('bcryptjs');
 // importamos el modelo de usuario y de token
-const User = require('../models/users.model');
-const Token = require('../models/tokens.model');
+const User = require('../models/user.model');
+const Token = require('../models/token.model');
 
 const { generateJWT } = require('../helpers/jwt');
 
 // login
 const loginAuth = async( req, res ) => {
-
    
     try {
 
@@ -46,9 +45,10 @@ const loginAuth = async( req, res ) => {
         // registramos el token en la BD    
         await token.save();
 
-        res.json(
+        res.status(200).json(
             {
                 ok: true,
+                msg: 'Token Creado!',
                 token: jwtString
             }
         );

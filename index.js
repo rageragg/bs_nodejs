@@ -25,11 +25,19 @@ app.use( express.json() );
 // hacemos la conexion a la BD
 dbConnection();
 
-// establecemos las rutas
+// establecemos las RUTAS
 // Auth
 app.use('/api/login', require('./routes/auths.routes'));
 // usuarios CRUD
 app.use('/api/users', require('./routes/users.routes'));
+// hospitales CRUD
+app.use('/api/hospitals', require('./routes/hospitals.routes'));
+// doctores CRUD
+app.use('/api/doctors', require('./routes/doctors.routes'));
+// busqueda 
+app.use('/api/search', require('./routes/searchs.routes'));
+// upload
+app.use('/api/upload', require('./routes/uploads.routes'));
 
 // iniciamos el servido
 app.listen( portListen, () => {
