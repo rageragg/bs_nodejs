@@ -10,7 +10,8 @@ const { validatorUserFields } = require('../middleware/validator-user-fields');
 const routes = Router();
 
 // importamos el controlador
-const { loginAuth } = require('../controllers/auths.controller');
+const { loginAuth, renewToken } = require('../controllers/auths.controller');
+const { validatorJWT } = require('../middleware/validator-jwt');
 
 // login
 // agregamos un middleware (personalizado "validatorUserFields") para validar request
@@ -21,6 +22,13 @@ routes.post('/',
         validatorUserFields
     ], 
     loginAuth
+);
+
+routes.get('/renew', 
+    [
+        validatorJWT
+    ],
+    renewToken
 );
 
 module.exports = routes;

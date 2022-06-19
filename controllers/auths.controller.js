@@ -59,11 +59,52 @@ const loginAuth = async( req, res ) => {
             ok: false,
             msg: 'Error inesperado!'
         });
-        
+    }
+
+}
+
+// renew token
+const renewToken = async( req, res ) => {
+    // obtenemos el token
+    const tokenRequest = req.header('x-token');
+
+    // obtenemos las credenciales del usuario ya logeado
+    const credentials = req.credentials;
+
+    try {
+        // generar JWT
+        const jwtString = await generateJWT( credentials?.uid, credentials?.role );
+        // creamos un token de BD
+        const token = new Token( 
+            {  
+                user_id: credentials?.uid,
+                token: jwtString
+            });
+        // registramos el token en la BD    
+        await token.save();
+        // eliminamos el token anterior
+        const tokenlDeleted = await token.deleteOne( { toke: tokenRequest } );
+
+        // retornamos el resultado
+        res.status(200).json(
+            {
+                ok: true,
+                msg: 'Token Renovado!',
+                token: jwtString
+            }
+        );
+
+    } catch (error) {
+        console.warn(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado!'
+        });
     }
 
 }
 
 module.exports = {
-    loginAuth
+    loginAuth,
+    renewToken
 }

@@ -41,7 +41,9 @@ routes.post('/',
 routes.put('/:uid', 
     [
         validatorJWT,
-        check( 'name', 'El nombre es obligatorio' ).not().isEmpty()
+        check( 'name', 'El nombre es obligatorio' ).not().isEmpty(),
+        check( 'hospital', 'El id del hospital debe ser valido' ).isMongoId(),
+        validatorUserFields
     ], 
     updateDoctor 
 );

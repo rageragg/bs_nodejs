@@ -1,7 +1,10 @@
 const { request, response } = require('express');
 const jwt = require('jsonwebtoken');
 
-const validatorJWT = ( req = request, res =  response, next ) => {
+// importamos el modelo del token
+const Token = require('../models/token.model');
+
+const validatorJWT = async( req = request, res =  response, next ) => {
     
     try {
         
@@ -14,6 +17,15 @@ const validatorJWT = ( req = request, res =  response, next ) => {
                 msg: 'Token Invalido'
             });
         }
+
+        // verificamos que el token este registrado
+        const existToken = await Token.findOne({ token });
+        if( !existToken ) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Token No registrado!'
+            });
+        } 
     
         // destructuramos los datos del payload del token
         const { uid, role } = jwt.verify( token, process.env.JWT_SECRET_KEY );

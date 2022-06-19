@@ -75,9 +75,12 @@ const createHospital = async( req, res = response ) => {
 
 const updateHospital = async( req = request, res = response ) => {
 
+    //
+    const credentials = req.credentials;
+    // obtenemos el parametro
+    const uid = req.params.uid;
+
     try {
-        // obtenemos el parametro
-        const uid = req.params.uid;
         // verificamos si existe el uid en la BD
         const existHospital = await Hospital.findById(uid);
         if( !existHospital ) {
@@ -89,12 +92,18 @@ const updateHospital = async( req = request, res = response ) => {
 
         // obtenemos los campos de la peticion
         // quitamos propiedades que no deben ser modificadas
-        const { fields } = req.body;
+        const { name } = req.body;
+        /** 
+         * const fields = {
+         *  ...req.body,
+         *  user: crendetials.uid
+         * }
+        */
 
-        // validamos si el email es correcto para actualizar
-        if( existHospital.name !== fields.name ) {
+        // validamos si el nombre es correcto para actualizar
+        if( existHospital.name !== name ) {
             // verificamos si existe el email en la BD
-            const existHospital = await Hospital.findOne({ name: fields.name  });
+            const existHospital = await Hospital.findOne({ name: name  });
             if( existHospital ) {
                 return res.status(400).json({
                     ok: false,
@@ -104,10 +113,14 @@ const updateHospital = async( req = request, res = response ) => {
 
         }
         
-        fields.name = fields.name;
-
         // actualizamos los datos en la BD
-        const hospitalUpdated = await Hospital.findByIdAndUpdate( uid, fields, { new: true } );
+        const hospitalUpdated = await Hospital.findByIdAndUpdate( uid, 
+            { 
+                name, 
+                user: credentials.uid 
+            }, 
+            { new: true } 
+        );
 
         res.status(200).json(
             {
