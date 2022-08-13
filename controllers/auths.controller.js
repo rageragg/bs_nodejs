@@ -49,7 +49,8 @@ const loginAuth = async( req, res ) => {
             {
                 ok: true,
                 msg: 'Token Creado!',
-                token: jwtString
+                token: jwtString,
+                user: existUser
             }
         );
         
@@ -72,6 +73,7 @@ const renewToken = async( req, res ) => {
     const credentials = req.credentials;
 
     try {
+        
         // generar JWT
         const jwtString = await generateJWT( credentials?.uid, credentials?.role );
         // creamos un token de BD
@@ -82,15 +84,17 @@ const renewToken = async( req, res ) => {
             });
         // registramos el token en la BD    
         await token.save();
-        // eliminamos el token anterior
-        const tokenlDeleted = await token.deleteOne( { toke: tokenRequest } );
+
+        // buscamos el usuario propietario
+        const user = await User.findById( credentials?.uid );
 
         // retornamos el resultado
         res.status(200).json(
             {
                 ok: true,
                 msg: 'Token Renovado!',
-                token: jwtString
+                token: jwtString,
+                user: user
             }
         );
 
@@ -104,7 +108,28 @@ const renewToken = async( req, res ) => {
 
 }
 
+// renew token
+const validateToken = async( req, res ) => {
+    // obtenemos el token
+    const tokenRequest = req.header('x-token');
+    // obtenemos las credenciales del usuario ya logeado
+    const credentials = req.credentials;
+    // buscamos el usuario
+    const existUser = await User.findById( credentials?.uid );
+
+    // retornamos el resultado
+    res.status(200).json(
+        {
+            ok: true,
+            msg: 'Token validado!',
+            token: tokenRequest,
+            user: existUser
+        }
+    );
+}
+
 module.exports = {
     loginAuth,
-    renewToken
+    renewToken,
+    validateToken
 }

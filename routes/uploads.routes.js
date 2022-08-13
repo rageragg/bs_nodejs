@@ -17,7 +17,7 @@ const routes = Router();
 routes.use(fileUpload());
 
 // cargar y obtener imagenes
-routes.put('/images/:model/:id', validatorJWT, putUploadImages );
-routes.get('/images/:model/:img', validatorJWT, getImages );
+routes.put('/images/:model/:id', putUploadImages );
+routes.get('/images/:model/:img', getImages );
 
 module.exports = routes;

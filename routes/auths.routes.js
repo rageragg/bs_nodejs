@@ -10,7 +10,7 @@ const { validatorUserFields } = require('../middleware/validator-user-fields');
 const routes = Router();
 
 // importamos el controlador
-const { loginAuth, renewToken } = require('../controllers/auths.controller');
+const { loginAuth, renewToken, validateToken } = require('../controllers/auths.controller');
 const { validatorJWT } = require('../middleware/validator-jwt');
 
 // login
@@ -29,6 +29,13 @@ routes.get('/renew',
         validatorJWT
     ],
     renewToken
+);
+
+routes.get('/validate', 
+    [
+        validatorJWT
+    ],
+    validateToken
 );
 
 module.exports = routes;

@@ -159,7 +159,7 @@ const deleteDoctor = async( req = request, res = response ) => {
                 msg: 'Doctor No existe'
             });
         }
-
+        
         // actualizamos los datos en la BD
         const doctorDeleted = await Doctor.findByIdAndDelete( uid );
 
