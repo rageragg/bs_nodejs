@@ -66,22 +66,22 @@ const putUploadImages = async( req = request, res = response ) => {
             }
 
             // asignamos la imagen al modelo
-            if( updateImgModel( model, id, uploadPath, FileName ) ) {
-
-                res.status(200).json({
-                    ok: true,
-                    msg: "Archivo Cargado y Asignado al modelo!"
+            updateImgModel( model, id, uploadPath, FileName )
+                .then( resp => {
+                    if( resp ) {
+                        res.status(200).json({
+                            ok: true,
+                            msg: "Archivo Cargado y Asignado al modelo "  + model + "!",
+                            file_name: FileName
+                        });
+                    } else {
+                        res.status(400).json({
+                            ok: false,
+                            msg: "Archivo no asignado al modelo " + model + "!",
+                            file_name: ''
+                        });
+                    }
                 });
-
-            } else {
-
-                res.status(500).json({
-                    ok: false,
-                    msg: "Archivo no asignado al modelo" + model + "!"
-                });
-
-            }
-
 
         });
 

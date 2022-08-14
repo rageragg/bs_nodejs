@@ -33,6 +33,8 @@ const removeFileExist = async( fileName ) => {
 
 
 const updateImgModel = async( model, id, path, fileName ) => {
+
+    let result = false;
     
     switch (model) {
         
@@ -43,24 +45,27 @@ const updateImgModel = async( model, id, path, fileName ) => {
                 let oldPath;
                 const user = await User.findById(id);
                 if(!user) {
-                    return false;
-                }
-    
-                // eliminamos la vieja imagen
-                oldPath = `./uploads/users/${ user.img }`;
-                if( fs.existsSync(oldPath)) {
-                    fs.unlinkSync( oldPath );
-                }
-    
-                // asignamos la nueva image``
-                if( fs.existsSync(path) ) {
-                    user.img = fileName;
-                    await user.save();
+                    result = false;
+                } else {
+
+                    // eliminamos la vieja imagen
+                    oldPath = `./uploads/users/${ user.img }`;
+                    if( fs.existsSync(oldPath)) {
+                        fs.unlinkSync( oldPath );
+                    }
+                    
+                    // asignamos la nueva image``
+                    if( fs.existsSync(path) ) {
+                        user.img = fileName;
+                        await user.save();
+                    }
+                    
+                    result = true;
                 }
 
             } catch (error) {
                 console.log(error);
-                return false;
+                result = false;
             }
             
             break;
@@ -72,24 +77,28 @@ const updateImgModel = async( model, id, path, fileName ) => {
                 let oldPath;
                 const hospital = await Hospital.findById(id);
                 if(!hospital) {
-                    return false;
-                }
-    
-                // eliminamos la vieja imagen
-                oldPath = `./uploads/hospitals/${ hospital.img }`;
-                if( fs.existsSync(oldPath)) {
-                    fs.unlinkSync( oldPath );
-                }
-    
-                // asignamos la nueva image``
-                if( fs.existsSync(path) ) {
-                    hospital.img = fileName;
-                    await hospital.save();
+                    result = false;
+                } {
+
+                    
+                    // eliminamos la vieja imagen
+                    oldPath = `./uploads/hospitals/${ hospital.img }`;
+                    if( fs.existsSync(oldPath)) {
+                        fs.unlinkSync( oldPath );
+                    }
+                    
+                    // asignamos la nueva image``
+                    if( fs.existsSync(path) ) {
+                        hospital.img = fileName;
+                        await hospital.save();
+                    }
+
+                    result = true;
                 }
 
             } catch (error) {
                 console.log(error);
-                return false;
+                result = false;
             }
 
             break;
@@ -101,31 +110,37 @@ const updateImgModel = async( model, id, path, fileName ) => {
                 let oldPath;
                 const doctor = await Doctor.findById(id);
                 if(!doctor) {
-                    return false;
-                }
-    
-                // eliminamos la vieja imagen
-                oldPath = `./uploads/doctors/${ doctor.img }`;
-                if( fs.existsSync(oldPath)) {
-                    fs.unlinkSync( oldPath );
-                }
-    
-                // asignamos la nueva image``
-                if( fs.existsSync(path) ) {
-                    doctor.img = fileName;
-                    await doctor.save();
+                    result = false;
+                } else {
+
+                    
+                    // eliminamos la vieja imagen
+                    oldPath = `./uploads/doctors/${ doctor.img }`;
+                    if( fs.existsSync(oldPath)) {
+                        fs.unlinkSync( oldPath );
+                    }
+                    
+                    // asignamos la nueva image``
+                    if( fs.existsSync(path) ) {
+                        doctor.img = fileName;
+                        await doctor.save();
+                    }
+
+                    result = true;
                 }
 
             } catch (error) {
                 console.log(error);
-                return false;
+                result = false;
             }
+
+            break;
 
         default:
             break;
     }
 
-    return true;
+    return result;
 }
 
 
