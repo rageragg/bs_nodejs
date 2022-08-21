@@ -8,15 +8,24 @@ const User = require('../models/user.model');
 
 const getListUsers = async( req = request, res = response ) => {
 
-    const users = await User.find({}, 'name email img role google');
+    const from = Number(req.query.from) || 0;
 
-    res.json(
-        {
+    const [ users, total ] = await Promise.all([
+        User
+            .find({}, 'nombre email name role google img')
+            .skip( from )
+            .limit( 5 ),
+
+            User.countDocuments()
+        ]);
+        
+        
+        res.json({
             ok: true,
-            msg: 'Lista de Usuarios',
-            users: users
-        }
-    );
+            users,
+            total
+        });
+        
 }
 
 // el objeto res = response, es el establecimiento del valor por defecto
