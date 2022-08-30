@@ -11,8 +11,6 @@ const validatorJWT = async( req = request, res =  response, next ) => {
         // obtenemos el token
         const token = req.header('x-token');
 
-        console.log(`Validando token: ${ token } `);
-
         // validamos el valor del token
         if ( !token ) {
             return res.status(401).json({

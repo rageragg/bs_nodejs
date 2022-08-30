@@ -9,6 +9,7 @@ const User = require('../models/user.model');
 const getListUsers = async( req = request, res = response ) => {
 
     const from = Number(req.query.from) || 0;
+    let pages = 0;
 
     const [ users, total ] = await Promise.all([
         User
@@ -19,11 +20,18 @@ const getListUsers = async( req = request, res = response ) => {
             User.countDocuments()
         ]);
         
+        if( total > 0 ) {
+            pages = Math.ceil(total/5);
+        } else {
+            pages = 1;
+        }
         
         res.json({
             ok: true,
             users,
-            total
+            total,
+            skip: 5,
+            pages
         });
         
 }
@@ -130,6 +138,7 @@ const deleteUser = async( req = request, res = response ) => {
     try {
         // obtenemos el parametro
         const uid = req.params.uid;
+
         // verificamos si existe el uid en la BD
         const existUser = await User.findById(uid);
         // validamos que exista

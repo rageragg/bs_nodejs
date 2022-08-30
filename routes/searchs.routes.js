@@ -6,12 +6,14 @@ const { Router } = require('express');
 const { validatorJWT } = require('../middleware/validator-jwt');
 
 // obtenemos los controladores de cada ruta
-const { getSearch } = require('../controllers/searchs.controller');
+const { getSearch, getDocumentsCollection } = require('../controllers/searchs.controller');
 
 // el objeto manager de rutas
 const routes = Router();
 
 // busqueda
 routes.get('/', validatorJWT, getSearch );
+
+routes.get('/collection/:model/:srch', validatorJWT , getDocumentsCollection );
 
 module.exports = routes;
